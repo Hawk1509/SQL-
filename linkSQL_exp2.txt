@@ -1,0 +1,104 @@
+set autocommit on
+
+1)
+
+STUDENT TABLE
+
+SQL> create table student (stud_no varchar(9) primary key, stud_lname varchar(30),                   
+  2  stud_fname varchar(20),address varchar(30),city varchar(10),state varchar(2),
+  3  postal_code varchar(6));
+
+Table created.
+
+INSTRUCTOR
+
+SQL> CREATE table instructor(instructor_id varchar(5) primary key, instructor_lname varchar(15), instructor_fname varchar(15), instructor_phone varchar (10));
+
+Table created.
+
+COURSE
+
+SQL> CREATE table course(course_code varchar(6) primary key, course_title varchar(25), course_hours number(2,0));
+
+Table created.
+
+SECTION
+
+CREATE table section(section_id varchar(7),time_offered varchar(10), days_offered varchar(10), section_room varchar(8), class_size number(3,0) check(class_size>=0) ,number_enrolled number(3,0) check(number_enrolled>=0), instructor_id varchar(5) references instructor(instructor_id), course_code varchar(6) references course(course_code), primary key ( section_id,time_offered));
+
+ENROLLMENT
+
+create table enrollment(stud_no varchar(9), section_id varchar(7), grade varchar(2), time_offered varchar(10),            
+   primary key(stud_no,section_id),foreign key(section_id,time_offered) references section(section_id,time_offered),foreign key(stud_no)references student(stud_no));
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+5)
+SQL> alter table enrollment modify grade varchar(4);
+
+Table altered.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+6)
+
+SQL> alter table instructor add instructor_mailId varchar(15);
+
+Table altered.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+7)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+8)
+SQL> insert into student values('&stud_no','&stud_lname','&stud_fname','&address','&city','&state','&postal_code');
+Enter value for stud_no: 111111
+Enter value for stud_lname: paul
+Enter value for stud_fname: joseph
+Enter value for address: xayzs
+Enter value for city: mumbai
+Enter value for state: MH
+Enter value for postal_code: 173940
+old   1: insert into student values('&stud_no','&stud_lname','&stud_fname','&address','&city','&state','&postal_code')
+new   1: insert into student values('111111','paul','joseph','xayzs','mumbai','MH','173940')
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+9)
+SQL> INSERT INTO COURSE VALUES('&COURSE_CODE','&COURSE_TITLE','&COURSE_HOURS');
+Enter value for course_code: CS240
+Enter value for course_title: WEB DESIGN
+Enter value for course_hours: 4
+old   1: INSERT INTO COURSE VALUES('&COURSE_CODE','&COURSE_TITLE','&COURSE_HOURS')
+new   1: INSERT INTO COURSE VALUES('CS240','WEB DESIGN','4')
+
+1 row created.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+10)
+
+SQL> INSERT INTO SECTION VALUES('&SECTION_ID','&TIME_OFFERED','&DAYS_OFFERED','&SECTION_ROOM','&CLASS_SIZE','&NUMBER_ENROLLED','&INSTRUCTOR_ID
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+SQL> DESC INSTRUCTOR;
+ Name														   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ INSTRUCTOR_ID													   NOT NULL VARCHAR2(5)
+ INSTRUCTOR_LNAME													    VARCHAR2(15)
+ INSTRUCTOR_FNAME													    VARCHAR2(15)
+ INSTRUCTOR_PHONE													    VARCHAR2(10)
+ INSTRUCTOR_MAILID													    VARCHAR2(15)
+
+SQL> INSERT INTO INSTRUCTOR VALUES('&INSTRUCTOR_ID','&INSTRUCTOR_LNAME','&INSTRUCTOR_FNAME','&INSTRUCTOR_PHONE','&INSTRUCTOR_MAILID');
+Enter value for instructor_id: 11111
+Enter value for instructor_lname: ANTHONY
+Enter value for instructor_fname: JOHN
+Enter value for instructor_phone: 7739472093
+Enter value for instructor_mailid: XYZ@gmail.com
+old   1: INSERT INTO INSTRUCTOR VALUES('&INSTRUCTOR_ID','&INSTRUCTOR_LNAME','&INSTRUCTOR_FNAME','&INSTRUCTOR_PHONE','&INSTRUCTOR_MAILID')
+new   1: INSERT INTO INSTRUCTOR VALUES('11111','ANTHONY','JOHN','7739472093','XYZ@gmail.com')
+
+1 row created.
+
+Commit complete.
+SQL> 
+

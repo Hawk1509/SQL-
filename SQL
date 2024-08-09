@@ -1,0 +1,183 @@
+
+sqlplus CS65522/723724@172.16.1.11/csdb
+
+
+
+SQL> create table department41(Dno number primary key, Dname varchar(50), EmpCount number, DeptHOD varchar(50));
+
+
+
+create table employee41(Eno varchar(10) primary key check(Eno like 'e%'),Ename varchar (10) not null, Salary number check(Salary>0),Dno int references department41(Dno), MgrNo int, DOJ date, Designation varchar(10), Address varchar(20),City varchar(20) check(city in ('Cochin','Mumbai','Chennai','Delhi')), Pincode int );
+
+
+ select*from tab; // to view created tables.
+ 
+ insert into department41 values(1,'AA',5,'ABC');
+ insert into department41 values(2,'BB',3,'CDE');
+insert into department41 values(3,'CC',4,'EFG');
+ insert into department41 values(4,'DD',6,'HIJ');
+ insert into department41 values(5,'EE',7,'JKL');
+ insert into department41 values(6,'Sales',8,'LMN');
+ insert into department41 values(7,'HR',9,'NOP');
+ insert into department41 values(8,'IT',10,'PQR');
+ 
+
+
+
+
+
+SQL> set linesize 200;
+SQL> /                      #to increase page display size
+
+
+
+SQL> select * from department41;
+
+       DNO DNAME						EMPCOUNT DEPTHOD
+---------- -------------------------------------------------- ---------- --------------------------------------------------
+	 1 AA							       5 ABC
+	 2 BB							       3 CDE
+	 3 CC							       4 EFG
+	 4 DD							       6 HIJ
+	 5 EE							       7 JKL
+	 6 Sales						       8 LMN
+	 7 HR							       9 NOP
+	 8 IT							      10 PQR
+
+8 rows selected.
+
+
+insert into employee41 values('e1','aaa',1000,3,11,'20-jan-2001','Employee','XYZ','Cochin',663483);
+insert into employee41 values('e2','Jannu',50001,6,12,'20-jan-2020','Attender','AKG','Cochin',663483);
+insert into employee41 values('e3','bbb',220000,7,13,'20-jan-2021','Employee','CHD','Delhi',667183);
+insert into employee41 values('e4','Axg',1000,5,11,'20-jan-2006','Attender','XYZ','Chennai',266485);
+insert into employee41 values('e5','Bxg',1000,8,12,'20-jan-2020','Attender','XYZ','Cochin',663483);
+insert into employee41 values('e6','Mannu',1000,6,11,'20-jan-2024','Fin','Xdjf','Delhi',113483);
+insert into employee41 values('e7','Tannu',1000,1,11,'20-jan-2024','Fin','Xdjf','Delhi',113483);
+insert into employee41 values('e8','Kannu',20000,2,12,'20-jan-2024','Employee','Xdjf','Delhi',113483);
+insert into employee41 values('e9','Bannu',30000,7,11,'20-jan-2024','Guard','Xdjf','Delhi',113483);
+insert into employee41 values('e10','Fannu',40000,7,11,'20-jan-2024','Fin','Xdjf','Delhi',113483);
+insert into employee41 values('e11','Lannu',50002,8,11,'20-jan-2024','Fin','Xdjf','Delhi',113483);
+insert into employee41 values('e12','Lannu',50002,4,11,'20-jan-2024','Fin','Xdjf','Delhi',113483);
+insert into employee41 values('e13','MIKE',60000,4,null,'20-feb-2024','Fin','Xdjf','Delhi',113483);
+
+1) SQL> select ename from employee41 where DOJ > '1-jan-2005' and DNO = 5;
+
+ENAME
+----------
+Axg
+
+
+2) SQL> select* from employee41 where dno!=4;
+
+ENO	   ENAME	  SALARY	DNO	 MGRNO DOJ	 DESIGNATIO ADDRESS		 CITY			 PINCODE
+---------- ---------- ---------- ---------- ---------- --------- ---------- -------------------- -------------------- ----------
+e1	   aaa		    1000	  3	    11 20-JAN-01 Employee   XYZ 		 Cochin 		  663483
+e2	   Jannu	   50001	  6	    12 20-JAN-20 Attender   AKG 		 Cochin 		  663483
+e3	   bbb		  220000	  7	    13 20-JAN-21 Employee   CHD 		 Delhi			  667183
+e4	   Axg		    1000	  5	    11 20-JAN-06 Attender   XYZ 		 Chennai		  266485
+e5	   Bxg		    1000	  8	    12 20-JAN-20 Attender   XYZ 		 Cochin 		  663483
+e6	   Mannu	    1000	  6	    11 20-JAN-24 Fin	    Xdjf		 Delhi			  113483
+e7	   Tannu	    1000	  1	    11 20-JAN-24 Fin	    Xdjf		 Delhi			  113483
+e8	   Kannu	   20000	  2	    12 20-JAN-24 Employee   Xdjf		 Delhi			  113483
+e9	   Bannu	   30000	  7	    11 20-JAN-24 Guard	    Xdjf		 Delhi			  113483
+e10	   Fannu	   40000	  7	    11 20-JAN-24 Fin	    Xdjf		 Delhi			  113483
+e11	   Lannu	   50002	  8	    11 20-JAN-24 Fin	    Xdjf		 Delhi			  113483
+
+11 rows selected.
+
+
+
+3) SQL> select ename from employee41,department41 where dname = 'Sales' and employee41.dno = department41.dno;
+
+ENAME
+----------
+Jannu
+Mannu
+
+
+4) SQL> select ename from employee41 where mgrno is null;
+
+ENAME
+----------
+MIKE
+
+5) SQL> select ename from employee41 where ename like 'J__n%';
+
+ENAME
+----------
+Jannu
+
+6) SQL> select*from employee41 where DOJ like '%20';
+
+ENO	   ENAME	  SALARY	DNO	 MGRNO DOJ	 DESIGNATIO ADDRESS		 CITY		 PINCODE
+---------- ---------- ---------- ---------- ---------- --------- ---------- -------------------- -------------------- ----------
+e2	   Jannu	   50001	  6	    12 20-JAN-20 Attender   AKG 		 Cochin 	  663483
+e5	   Bxg		    1000	  8	    12 20-JAN-20 Attender   XYZ 		 Cochin 	  663483
+
+
+7) SQL> select 'Every Year ' || ename ||' earns ' || salary*12 ||' as AnnualSalary' from employee41;
+
+'EVERYYEAR'||ENAME||'EARNS'||SALARY*12||'ASANNUALSALARY'
+------------------------------------------------------------------------------------
+Every Year aaa earns 12000 as AnnualSalary
+Every Year Jannu earns 600012 as AnnualSalary
+Every Year bbb earns 2640000 as AnnualSalary
+Every Year Axg earns 12000 as AnnualSalary
+Every Year Bxg earns 12000 as AnnualSalary
+Every Year Mannu earns 12000 as AnnualSalary
+Every Year Tannu earns 12000 as AnnualSalary
+Every Year Kannu earns 240000 as AnnualSalary
+Every Year Bannu earns 360000 as AnnualSalary
+Every Year Fannu earns 480000 as AnnualSalary
+Every Year Lannu earns 600024 as AnnualSalary
+
+'EVERYYEAR'||ENAME||'EARNS'||SALARY*12||'ASANNUALSALARY'
+------------------------------------------------------------------------------------
+Every Year Lannu earns 600024 as AnnualSalary
+Every Year MIKE earns 720000 as AnnualSalary
+
+13 rows selected.
+
+
+8) SQL> select count(*) as TotalEmp from employee41;
+
+  TOTALEMP
+----------
+	13
+
+
+9) SQL> select min(salary) from employee41 group by designation;
+
+MIN(SALARY)
+-----------
+       1000
+       1000
+       1000
+      30000
+
+11)SQL> select ename,to_char(DOJ,'dd-mm-yyyy') as DOJ from employee41;
+
+ENAME	   DOJ
+---------- ----------
+aaa	   20-01-2001
+Jannu	   20-01-2020
+bbb	   20-01-2021
+Axg	   20-01-2006
+Bxg	   20-01-2020
+Mannu	   20-01-2024
+Tannu	   20-01-2024
+Kannu	   20-01-2024
+Bannu	   20-01-2024
+Fannu	   20-01-2024
+Lannu	   20-01-2024
+
+ENAME	   DOJ
+---------- ----------
+Lannu	   20-01-2024
+MIKE	   20-02-2024
+
+13 rows selected.
+
+
+10)  
