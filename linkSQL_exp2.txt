@@ -1,5 +1,62 @@
 set autocommit on
 
+SQL> select * from student;
+
+STUD_NO   STUD_LNAME			 STUD_FNAME	      ADDRESS			     CITY	ST POSTAL
+--------- ------------------------------ -------------------- ------------------------------ ---------- -- ------
+111111	  paul				 joseph 	      xayzs			     mumbai	MH 173940
+111112	  RAUL				 JOHN		      VINTAGE(H)		     PUNE	MH 883927
+111113	  JOSE				 STEFY		      EDSON(H)			     WALLSTREET UP 778264
+111114	  Binod 			 Gaurav 	      Cellar(H) 		     Panam	KL 920371
+111115	  Nigu				 Bineesh	      Bird(h)			     piho	UP 928356
+
+
+SQL> select*from instructor;
+
+INSTR INSTRUCTOR_LNAM INSTRUCTOR_FNAM INSTRUCTOR INSTRUCTOR_MAIL
+----- --------------- --------------- ---------- ---------------
+11111 ANTHONY	      JOHN	      7739472093 XYZ@gmail.com
+11112 Vinod	      Binod	      2837492730 ABC@123.com
+11113 Jim	      Jimmy	      9284030281
+11114 Jam	      Jim	      8295836474
+11115 Hadlee	      Joseph	      7563829462
+
+
+SQL> select *from course;
+
+COURSE COURSE_TITLE		 COURSE_HOURS
+------ ------------------------- ------------
+CS240  WEB DESIGN			    4
+cs213  PROGRAMMING			    4
+CS211  JAVA				    3
+CS201  C++				    5
+cs206  Figma				    2
+
+SQL> SELECT *FROM SECTION;
+
+SECTION TIME_OFFER DAYS_OFFER SECTION_ CLASS_SIZE NUMBER_ENROLLED INSTR COURSE
+------- ---------- ---------- -------- ---------- --------------- ----- ------
+3011236 8-9	   M	      clgn502		9		6 11114 cs206
+3011255 4-5	   tf	      algn102	       72	       43 11111 CS201
+3011655 3-5	   m	      nlgn203	       50	       40 11114 CS201
+3044566 2-5	   m	      mlgn206	       59	       23 11112 CS211
+301125	2-4	   MW	      BLGN102	       39		0 11113 CS240
+
+
+
+SQL> SELECT*FROM ENROLLMENT;
+
+STUD_NO   SECTION GRAD TIME_OFFER
+--------- ------- ---- ----------
+111112	  3011236 B+   8-9
+111112	  3011255 B-   4-5
+111112	  3044566 A    2-5
+111113	  3011655 C    3-5
+111115	  3011655 A    3-5
+
+
+
+
 1)
 
 STUDENT TABLE
@@ -46,6 +103,24 @@ Table altered.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 7)
+SQL> create view INSTRUCTION_SECTION_VIEW AS SELECT INSTRUCTOR_FNAME,INSTRUCTOR_LNAME,TIME_OFFERED,DAYS_OFFERED,SECTION_ROOM
+    COURSE_CODE,COURSE_TITLE   
+    FROM instructor i,course c, section s       
+    where i.instructor_id = s.instructor_id and s.course_code = c.course_code;
+ 
+View created.
+
+SQL> select* FROM INSTRUCTION_SECTION_VIEW;   
+
+INSTRUCTOR_FNAM INSTRUCTOR_LNAM TIME_OFFER DAYS_OFFER COURSE_C COURSE_TITLE
+--------------- --------------- ---------- ---------- -------- -------------------------
+Jimmy		Jim		2-4	   mw	      blgn102  WEB DESIGN
+Jim		Jam		8-9	   tw	      clgn502  Figma
+JOHN		ANTHONY 	4-5	   tf	      algn102  C++
+Jim		Jam		3-5	   m	      nlgn203  C++
+Binod		Vinod		2-5	   m	      mlgn206  JAVA
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 8)
@@ -75,7 +150,21 @@ new   1: INSERT INTO COURSE VALUES('CS240','WEB DESIGN','4')
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 10)
 
-SQL> INSERT INTO SECTION VALUES('&SECTION_ID','&TIME_OFFERED','&DAYS_OFFERED','&SECTION_ROOM','&CLASS_SIZE','&NUMBER_ENROLLED','&INSTRUCTOR_ID
+SQL> INSERT INTO SECTION VALUES('&SECTION_ID','&TIME_OFFERED','&DAYS_OFFERED','&SECTION_ROOM','&CLASS_SIZE','&NUMBER_ENROLLED','&INSTRUCTOR_ID','&course_code');
+
+Enter value for section_id: 301125
+Enter value for time_offered: 2-4
+Enter value for days_offered: MW
+Enter value for section_room: BLGN102
+Enter value for class_size: 35
+Enter value for number_enrolled: 0
+Enter value for instructor_id: 11113
+Enter value for course_code: CS240
+old   1: INSERT INTO SECTION VALUES('&SECTION_ID','&TIME_OFFERED','&DAYS_OFFERED','&SECTION_ROOM','&CLASS_SIZE','&NUMBER_ENROLLED','&INSTRUCTOR_ID','&course_code')
+new   1: INSERT INTO SECTION VALUES('301125','2-4','MW','BLGN102','35','0','11113','CS240')
+
+1 row created.
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -101,4 +190,197 @@ new   1: INSERT INTO INSTRUCTOR VALUES('11111','ANTHONY','JOHN','7739472093','XY
 
 Commit complete.
 SQL> 
+
+
+
+
+
+11)
+SQL> insert into enrollment values('&stud_no','&section_id','&grade','&time_offered');
+Enter value for stud_no: 111111
+Enter value for section_id: 301125 
+Enter value for grade: 
+Enter value for time_offered: 2-4
+old   1: insert into enrollment values('&stud_no','&section_id','&grade','&time_offered')
+new   1: insert into enrollment values('111111','301125','','2-4')
+
+1 row created.
+
+SQL> select*from enrollment;
+
+STUD_NO   SECTION GRAD TIME_OFFER
+--------- ------- ---- ----------
+111111	  301125       2-4
+111112	  3011236 B+   8-9
+111112	  3011255 B-   4-5
+111112	  3044566 A    2-5
+111113	  3011655 C    3-5
+111115	  3011655 A    3-5
+
+6 rows selected.
+
+
+12)
+SQL> UPDATE SECTION SET CLASS_SIZE = CLASS_SIZE + (CLASS_SIZE*0.1);
+
+5 rows updated.
+
+Commit complete.
+SQL> SELECT *FROM SECTION;
+
+SECTION TIME_OFFER DAYS_OFFER SECTION_ CLASS_SIZE NUMBER_ENROLLED INSTR COURSE
+------- ---------- ---------- -------- ---------- --------------- ----- ------
+3011236 8-9	   tw	      clgn502		9		6 11114 cs206
+3011255 4-5	   tf	      algn102	       72	       43 11111 CS201
+3011655 3-5	   m	      nlgn203	       50	       40 11114 CS201
+3044566 2-5	   m	      mlgn206	       59	       23 11112 CS211
+301125	2-4	   MW	      BLGN102	       39		0 11113 CS240
+
+
+13)
+SQL> UPDATE SECTION SET TIME_OFFERED = '2-4' WHERE SECTION_ID = 3011236;
+
+1 row updated.
+
+Commit complete.
+SQL> SELECT *FROM SECTION;
+
+SECTION TIME_OFFER DAYS_OFFER SECTION_ CLASS_SIZE NUMBER_ENROLLED INSTR COURSE
+------- ---------- ---------- -------- ---------- --------------- ----- ------
+3011236 2-4	   M	      clgn502		9		6 11114 cs206
+3011255 4-5	   tf	      algn102	       72	       43 11111 CS201
+3011655 3-5	   m	      nlgn203	       50	       40 11114 CS201
+3044566 2-5	   m	      mlgn206	       59	       23 11112 CS211
+301125	2-4	   MW	      BLGN102	       39		0 11113 CS240
+
+
+14)
+SQL> DELETE FROM SECTION WHERE SECTION_ID = 3011255;
+DELETE FROM SECTION WHERE SECTION_ID = 3011255
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (CS65522.SYS_C0036632) violated - child record found
+
+15)
+SQL> DELETE FROM COURSE WHERE COURSE_CODE ='CS240';
+DELETE FROM COURSE WHERE COURSE_CODE ='CS240'
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (CS65522.SYS_C0036452) violated - child record found
+
+16)
+SELECT SECTION_ID,TIME_OFFERED,DAYS_OFFERED,COURSE_CODE                
+     FROM SECTION WHERE CLASS_SIZE >= 40 AND CLASS_SIZE <= 50 AND DAYS_OFFERED LIKE 'm%';
+     
+SECTION TIME_OFFER DAYS_OFFER COURSE
+------- ---------- ---------- ------
+3011655 3-5	   m	      CS201
+
+
+
+17)
+SQL> SELECT COURSE_CODE,COURSE_TITLE,COURSE_HOURS FROM COURSE WHERE COURSE_HOURS = '4' ORDER BY COURSE_CODE DESC;
+
+COURSE COURSE_TITLE		 COURSE_HOURS
+------ ------------------------- ------------
+cs213  PROGRAMMING			    4
+CS240  WEB DESIGN			    4
+
+
+18)
+SQL> SELECT INSTRUCTOR_ID,SUM(CLASS_SIZE) AS TOTAL FROM SECTION GROUP BY INSTRUCTOR_ID ORDER BY TOTAL DESC;
+
+INSTR	   TOTAL
+----- ----------
+11111	      72
+11112	      59
+11114	      59
+11113	      39
+
+
+
+19)
+SQL> SELECT STUD_NO,SECTION_ID,GRADE FROM ENROLLMENT WHERE GRADE LIKE 'B%';
+
+STUD_NO   SECTION GRAD
+--------- ------- ----
+111112	  3011255 B-
+
+
+20)
+ select course_code,avg(class_size) as average from course c, section s where c.course_code = s.course_code group by c.course_code;
+
+
+21)
+select instructor_fname,instructot_lname,time_offered,days_offered,section_room,course_code,course_title from instructor i,section s,course c
+  where i.instructor_id = s.instructor_id and s.course_code = c.course_code;
+
+22)
+SQL> select stud_fname,stud_lname,section_id,grade from student s join enrollment e on s.stud_no = e.stud_no;
+
+STUD_FNAME	     STUD_LNAME 		    SECTION GRAD
+-------------------- ------------------------------ ------- ----
+joseph		     paul			    301125
+JOHN		     RAUL			    3011255 B-
+JOHN		     RAUL			    3044566 A
+STEFY		     JOSE			    3011655 C
+Bineesh 	     Nigu			    3011655 A
+
+23)
+select s stud_fname,s stud_lname from student s except select s stud_fname,s stud_lname from student s join enrollment e on stud_no = s.stud_no;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
