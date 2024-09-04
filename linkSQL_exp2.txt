@@ -310,10 +310,39 @@ STUD_NO   SECTION GRAD
 20)
  select course_code,avg(class_size) as average from course c, section s where c.course_code = s.course_code group by c.course_code;
 
+20)
+SELECT 
+    s.course_code, 
+    AVG(s.class_size) AS average_class_size
+FROM 
+    sections s
+GROUP BY 
+    s.course_code;
+
+
+
 
 21)
 select instructor_fname,instructot_lname,time_offered,days_offered,section_room,course_code,course_title from instructor i,section s,course c
   where i.instructor_id = s.instructor_id and s.course_code = c.course_code;
+
+21)
+SELECT 
+    i.fname, 
+    i.lname, 
+    s.section_time, 
+    s.section_days, 
+    s.section_room, 
+    c.course_code, 
+    c.course_title
+FROM 
+    instructor i
+JOIN 
+    section s ON i.instructor_id = s.instructor_id
+JOIN 
+    course c ON s.course_code = c.course_code;
+
+
 
 22)
 SQL> select stud_fname,stud_lname,section_id,grade from student s join enrollment e on s.stud_no = e.stud_no;
@@ -328,6 +357,56 @@ Bineesh 	     Nigu			    3011655 A
 
 23)
 select s stud_fname,s stud_lname from student s except select s stud_fname,s stud_lname from student s join enrollment e on stud_no = s.stud_no;
+
+23)
+SELECT 
+    s.student_name
+FROM 
+    students s
+WHERE 
+    s.student_id NOT IN (
+        SELECT 
+            e.student_id 
+        FROM 
+            enrollments e
+    );
+
+23)
+SELECT DISTINCT 
+    s.student_name
+FROM 
+    students s
+LEFT JOIN 
+    enrollments e ON s.student_id = e.student_id
+WHERE 
+    e.student_id IS NULL;
+
+23)
+SELECT 
+    s.student_name
+FROM 
+    students s
+WHERE 
+    NOT EXISTS (
+        SELECT 
+            1 
+        FROM 
+            enrollments e 
+        WHERE 
+            e.student_id = s.student_id
+    );
+
+23)
+SELECT 
+    s.student_name
+FROM 
+    students s
+LEFT JOIN 
+    enrollments e ON s.student_id = e.student_id
+WHERE 
+    e.course_id IS NULL;
+
+
 
 
 
